@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>电气创新协会 | 交叉学科 · 学科竞赛 · 科技实践</title>
+
+<!-- 国内 CDN：Font Awesome 6 图标库 -->
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<!-- 国内 CDN：AOS 滚动动画库 -->
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/aos/2.3.4/aos.css">
+
+<style>
+  :root {
+    --bg: #070b12;
+    --bg-soft: #0d1420;
+    --surface: #111b2b;
+    --line: rgba(64, 156, 255, 0.15);
+    --line-strong: rgba(64, 156, 255, 0.35);
+    --text: #e8eef7;
+    --muted: #8b9cb3;
+    --accent: #3d9bff;
+    --accent-2: #17d4c8;
+    --amber: #f5a623;
+    --radius: 14px;
+    --max: 1160px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  .container { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+  /* ========== 导航 ========== */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(7, 11, 18, 0.82);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo {
+    font-weight: 800;
+    font-size: 17px;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-logo i { color: var(--accent); font-size: 20px; }
+  .nav-links { display: flex; gap: 28px; font-size: 14px; color: var(--muted); }
+  .nav-links a { transition: color 0.2s; }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta {
+    font-size: 13px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #04101f;
+    font-weight: 700;
+  }
+  @media (max-width: 720px) {
+    .nav-links { display: none; }
+  }
+
+  /* ========== Hero ========== */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 120px 0 80px;
+    background:
+      radial-gradient(ellipse 70% 55% at 72% 28%, rgba(61, 155, 255, 0.13), transparent),
+      radial-gradient(ellipse 50% 45% at 18% 78%, rgba(23, 212, 200, 0.08), transparent),
+      var(--bg);
+    overflow: hidden;
+  }
+
+  /* 电路脉络背景 */
+  .circuit-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(61, 155, 255, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(61, 155, 255, 0.055) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 80% 70% at 60% 40%, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 60% 40%, black 30%, transparent 75%);
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 820px; }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    letter-spacing: 1.5px;
+    color: var(--accent-2);
+    border: 1px solid rgba(23, 212, 200, 0.3);
+    padding: 5px 14px;
+    border-radius: 999px;
+    margin-bottom: 28px;
+    background: rgba(23, 212, 200, 0.06);
+  }
+  .hero-badge i { font-size: 11px; }
+
+  .hero h1 {
+    font-size: clamp(42px, 7vw, 76px);
+    font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: -1px;
+    margin-bottom: 24px;
+  }
+  .hero h1 .grad {
+    background: linear-gradient(110deg, var(--accent) 10%, var(--accent-2) 90%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .hero-desc {
+    font-size: clamp(15px, 2vw, 17.5px);
+    color: var(--muted);
+    max-width: 620px;
+    margin-bottom: 38px;
+    line-height: 1.85;
+  }
+  .hero-desc strong { color: var(--text); font-weight: 600; }
+
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 60px; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 13px 26px;
+    border-radius: 10px;
+    font-size: 14.5px;
+    font-weight: 700;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #04101f;
+    box-shadow: 0 8px 26px rgba(61, 155, 255, 0.25);
+  }
+  .btn-ghost {
+    border: 1px solid var(--line-strong);
+    color: var(--text);
+    background: rgba(61, 155, 255, 0.05);
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 44px;
+    flex-wrap: wrap;
+    padding-top: 36px;
+    border-top: 1px solid var(--line);
+  }
+  .hero-stat .num {
+    font-size: 30px;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1.2;
+  }
+  .hero-stat .label { font-size: 12.5px; color: var(--muted); letter-spacing: 0.5px; }
+
+  /* ========== 通用 Section ========== */
+  section { padding: 96px 0; position: relative; }
+  .section-tag {
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: var(--accent-2);
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .section-title {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    margin-bottom: 16px;
+    line-height: 1.25;
+  }
+  .section-desc {
+    font-size: 15.5px;
+    color: var(--muted);
+    max-width: 640px;
+    margin-bottom: 52px;
+    line-height: 1.85;
+  }
+
+  /* ========== 关于 ========== */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 28px;
+    align-items: stretch;
+  }
+  @media (max-width: 860px) { .about-grid { grid-template-columns: 1fr; } }
+
+  .about-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 38px;
+    position: relative;
+    overflow: hidden;
+  }
+  .about-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  }
+  .about-card h3 {
+    font-size: 21px;
+    font-weight: 800;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .about-card h3 i { color: var(--accent); font-size: 18px; }
+  .about-card p {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.9;
+    margin-bottom: 14px;
+  }
+  .about-card p:last-child { margin-bottom: 0; }
+  .about-card strong { color: var(--text); font-weight: 600; }
+
+  .about-side {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .side-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 26px 28px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .side-item .icon {
+    width: 44px; height: 44px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: rgba(61, 155, 255, 0.1);
+    border: 1px solid rgba(61, 155, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-size: 18px;
+  }
+  .side-item h4 { font-size: 15.5px; font-weight: 700; margin-bottom: 4px; }
+  .side-item p { font-size: 13.5px; color: var(--muted); line-height: 1.65; }
+
+  /* ========== 学科领域 ========== */
+  .fields-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 900px) { .fields-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 560px) { .fields-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  .field-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 30px 20px;
+    text-align: center;
+    transition: border-color 0.25s, transform 0.25s;
+  }
+  .field-card:hover {
+    border-color: var(--line-strong);
+    transform: translateY(-4px);
+  }
+  .field-card i {
+    font-size: 28px;
+    color: var(--accent);
+    margin-bottom: 14px;
+    display: block;
+  }
+  .field-card span {
+    font-size: 14.5px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  /* ========== 竞赛 ========== */
+  .compete-wrap {
+    background: var(--bg-soft);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .compete-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+  @media (max-width: 700px) { .compete-list { grid-template-columns: 1fr; } }
+
+  .compete-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 26px 28px;
+    transition: border-color 0.25s;
+  }
+  .compete-item:hover { border-color: var(--line-strong); }
+  .compete-item .medal {
+    width: 52px; height: 52px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(245, 166, 35, 0.15), rgba(245, 166, 35, 0.05));
+    border: 1px solid rgba(245, 166, 35, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--amber);
+    font-size: 20px;
+  }
+  .compete-item h4 { font-size: 16px; font-weight: 700; margin-bottom: 3px; }
+  .compete-item p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* ========== 培养体系 ========== */
+  .system-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 28px;
+    padding: 36px 0;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .step:last-child { border-bottom: none; }
+  @media (max-width: 640px) {
+    .step { grid-template-columns: 1fr; gap: 12px; }
+  }
+  .step-num {
+    font-size: 44px;
+    font-weight: 900;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--line-strong);
+    letter-spacing: -1px;
+  }
+  .step:first-child .step-num { -webkit-text-stroke-color: var(--accent); }
+  .step-body h4 {
+    font-size: 19px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .step-body h4 i { color: var(--accent-2); font-size: 16px; }
+  .step-body p {
+    font-size: 14.5px;
+    color: var(--muted);
+    line-height: 1.85;
+    max-width: 720px;
+  }
+
+  /* ========== 西门子专项 ========== */
+  .siemens {
+    background:
+      radial-gradient(ellipse 60% 60% at 80% 40%, rgba(23, 212, 200, 0.07), transparent),
+      var(--bg-soft);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .siemens-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin-top: 40px;
+  }
+  @media (max-width: 700px) { .siemens-grid { grid-template-columns: 1fr; } }
+  .siemens-card {
+    background: rgba(17, 27, 43, 0.7);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 28px 30px;
+  }
+  .siemens-card h4 {
+    font-size: 15.5px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .siemens-card h4 i { color: var(--accent); font-size: 15px; }
+  .siemens-card p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.85;
+  }
+  .siemens-card p strong { color: var(--accent-2); font-weight: 600; }
+
+  /* ========== CTA ========== */
+  .cta {
+    text-align: center;
+    padding: 110px 0;
+    background:
+      radial-gradient(ellipse 55% 60% at 50% 40%, rgba(61, 155, 255, 0.12), transparent),
+      var(--bg);
+  }
+  .cta h2 {
+    font-size: clamp(30px, 5vw, 46px);
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    margin-bottom: 18px;
+    line-height: 1.25;
+  }
+  .cta p {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 520px;
+    margin: 0 auto 36px;
+    line-height: 1.85;
+  }
+
+  /* ========== Footer ========== */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 32px 0;
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  footer .footer-brand {
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  /* 装饰：角标 */
+  .corner-mark {
+    position: absolute;
+    width: 18px; height: 18px;
+    border-color: var(--line-strong);
+    border-style: solid;
+  }
+  .corner-mark.tl { top: 14px; left: 14px; border-width: 1.5px 0 0 1.5px; }
+  .corner-mark.br { bottom: 14px; right: 14px; border-width: 0 1.5px 1.5px 0; }
+</style>
+</head>
+<body>
+
+<!-- ===== 导航 ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <i class="fa-solid fa-bolt"></i>
+      电气创新协会
+    </div>
+    <div class="nav-links">
+      <a href="#about">关于协会</a>
+      <a href="#fields">学科方向</a>
+      <a href="#compete">竞赛成果</a>
+      <a href="#system">培养体系</a>
+    </div>
+    <a href="#join" class="nav-cta">闪回</a>
+  </div>
+</nav>
+
+<!-- ===== Hero ===== -->
+<header class="hero">
+  <div class="circuit-bg"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge" data-aos="fade-down">
+        <i class="fa-solid fa-circle"></i>
+        专注工科前沿 · 青滨科创组织
+      </div>
+      <h1 data-aos="fade-up">
+        以实干赋能成长<br>
+        <span class="grad">以创新驱动突破</span>
+      </h1>
+      <p class="hero-desc" data-aos="fade-up" data-aos-delay="100">
+        电气创新协会是我校专注<strong>电气、机械、智能制造、电子、自动化</strong>等学科前沿技术发展的高水平科创组织。依托专业实验室平台，以学科竞赛、工程实践、技术创新为核心，培养理论扎实、实操过硬、具备系统化工程思维的创新型工科人才。
+      </p>
+      <div class="hero-actions" data-aos="fade-up" data-aos-delay="200">
+        <a href="#system" class="btn btn-primary">
+          了解培养体系 <i class="fa-solid fa-arrow-right"></i>
+        </a>
+        <a href="#compete" class="btn btn-ghost">
+          查看竞赛成果
+        </a>
+      </div>
+      <div class="hero-stats" data-aos="fade-up" data-aos-delay="300">
+        <div class="hero-stat">
+          <div class="num">5+</div>
+          <div class="label">核心学科方向</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num">4</div>
+          <div class="label">递进式培养层级</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num">100%</div>
+          <div class="label">虚拟仿真项目化训练</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== 关于 ===== -->
+<section id="about">
+  <div class="container">
+    <div class="section-tag" data-aos="fade-up">About Us</div>
+    <h2 class="section-title" data-aos="fade-up">立足工科前沿的<br>高水平科创组织</h2>
+    <p class="section-desc" data-aos="fade-up">
+      协会依托专业实验室平台，立足工科前沿发展方向，形成了梯队化学习、常态化训练、项目化实战的优良科创氛围。
+    </p>
+
+    <div class="about-grid">
+      <div class="about-card" data-aos="fade-right">
+        <div class="corner-mark tl"></div>
+        <div class="corner-mark br"></div>
+        <h3><i class="fa-solid fa-microchip"></i> 协会定位</h3>
+        <p>
+          电气创新协会以<strong>学科竞赛、工程实践、技术创新</strong>为核心培养模式，致力于培养具备系统化工程思维的创新型工科人才。协会长期深耕各类高水平科创赛事，形成了成熟的项目传承体系。
+        </p>
+        <p>
+          现阶段重点开展<strong>西门子智能制造通识体系学习</strong>，围绕工业自动化控制、产线工艺规划、设备联动逻辑、生产效能分析等核心内容，夯实成员智能制造专业基础。
+        </p>
+      </div>
+      <div class="about-side">
+        <div class="side-item" data-aos="fade-left" data-aos-delay="80">
+          <div class="icon"><i class="fa-solid fa-flask"></i></div>
+          <div>
+            <h4>依托专业实验室平台</h4>
+            <p>硬件实操、自动控制编程、虚拟仿真全链条覆盖。</p>
+          </div>
+        </div>
+        <div class="side-item" data-aos="fade-left" data-aos-delay="160">
+          <div class="icon"><i class="fa-solid fa-layer-group"></i></div>
+          <div>
+            <h4>梯队化 · 常态化 · 项目化</h4>
+            <p>梯队化学习、常态化训练、项目化实战的科创氛围。</p>
+          </div>
+        </div>
+        <div class="side-item" data-aos="fade-left" data-aos-delay="240">
+          <div class="icon"><i class="fa-solid fa-diagram-project"></i></div>
+          <div>
+            <h4>成熟的项目传承体系</h4>
+            <p>获奖成果与项目经验持续沉淀，成员之间传帮带。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 学科方向 ===== -->
+<section id="fields" style="padding-top: 0;">
+  <div class="container">
+    <div class="section-tag" data-aos="fade-up">Disciplines</div>
+    <h2 class="section-title" data-aos="fade-up">五大核心学科方向</h2>
+    <p class="section-desc" data-aos="fade-up">
+      跨越电气、机械、智能制造、电子与自动化，在交叉融合中寻找创新突破。
+    </p>
+    <div class="fields-grid">
+      <div class="field-card" data-aos="zoom-in" data-aos-delay="0">
+        <i class="fa-solid fa-bolt"></i>
+        <span>电气工程</span>
+      </div>
+      <div class="field-card" data-aos="zoom-in" data-aos-delay="60">
+        <i class="fa-solid fa-gears"></i>
+        <span>机械工程</span>
+      </div>
+      <div class="field-card" data-aos="zoom-in" data-aos-delay="120">
+        <i class="fa-solid fa-industry"></i>
+        <span>智能制造</span>
+      </div>
+      <div class="field-card" data-aos="zoom-in" data-aos-delay="180">
+        <i class="fa-solid fa-memory"></i>
+        <span>电子信息</span>
+      </div>
+      <div class="field-card" data-aos="zoom-in" data-aos-delay="240">
+        <i class="fa-solid fa-robot"></i>
+        <span>自动化</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 竞赛成果 ===== -->
+<section id="compete" class="compete-wrap">
+  <div class="container">
+    <div class="section-tag" data-aos="fade-up">Competitions</div>
+    <h2 class="section-title" data-aos="fade-up">在高水平赛事中锤炼真本领</h2>
+    <p class="section-desc" data-aos="fade-up">
+      长期深耕各类高水平科创赛事，积累了丰厚的获奖成果与成熟的项目传承体系。
+    </p>
+    <div class="compete-list">
+      <div class="compete-item" data-aos="fade-up" data-aos-delay="0">
+        <div class="medal"><i class="fa-solid fa-award"></i></div>
+        <div>
+          <h4>“西门子杯”智能制造挑战赛</h4>
+          <p>聚焦工业自动化与智能制造系统级工程能力。</p>
+        </div>
+      </div>
+      <div class="compete-item" data-aos="fade-up" data-aos-delay="80">
+        <div class="medal"><i class="fa-solid fa-trophy"></i></div>
+        <div>
+          <h4>“挑战杯”</h4>
+          <p>全国大学生课外学术科技作品竞赛，锤炼创新思维。</p>
+        </div>
+      </div>
+      <div class="compete-item" data-aos="fade-up" data-aos-delay="160">
+        <div class="medal"><i class="fa-solid fa-globe"></i></div>
+        <div>
+          <h4>“互联网+”</h4>
+          <p>创新创业大赛，推动技术成果与产业需求对接。</p>
+        </div>
+      </div>
+      <div class="compete-item" data-aos="fade-up" data-aos-delay="240">
+        <div class="medal"><i class="fa-solid fa-pen-ruler"></i></div>
+        <div>
+          <h4>机电产品创新设计竞赛</h4>
+          <p>从概念设计到实物制作，完整工程链路实战。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 培养体系 ===== -->
+<section id="system">
+  <div class="container">
+    <div class="section-tag" data-aos="fade-up">Training System</div>
+    <h2 class="section-title" data-aos="fade-up">层次清晰的科创培养体系</h2>
+    <p class="section-desc" data-aos="fade-up">
+      从基础硬件实操、自动控制编程，到虚拟工厂数字孪生仿真、智能产线优化迭代，逐级递进，步步深入。
+    </p>
+
+    <div class="system-steps">
+      <div class="step" data-aos="fade-up">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <h4><i class="fa-solid fa-screwdriver-wrench"></i> 基础硬件实操</h4>
+          <p>从电路搭建、元器件识别与焊接调试起步，建立对电气系统物理层的真实手感与工程直觉，为后续编程与系统集成打下扎实基础。</p>
+        </div>
+      </div>
+      <div class="step" data-aos="fade-up" data-aos-delay="60">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <h4><i class="fa-solid fa-code"></i> 自动控制编程</h4>
+          <p>掌握PLC编程与逻辑控制方法，理解设备信号交互、工序联动的实现机制，完成从硬件到控制层的跨越。</p>
+        </div>
+      </div>
+      <div class="step" data-aos="fade-up" data-aos-delay="120">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <h4><i class="fa-solid fa-cubes"></i> 虚拟工厂数字孪生仿真</h4>
+          <p>依托完整的西门子虚拟仿真平台，搭建数字化虚拟工厂环境，完整复刻真实工业生产流程。成员全程参与虚拟产线建模、设备调试、工艺流程排布与自动化运转模拟，通过虚拟PLC完成闭环控制，在零硬件损耗、高自由度的环境中深度熟悉现代化工厂的生产逻辑。</p>
+        </div>
+      </div>
+      <div class="step" data-aos="fade-up" data-aos-delay="180">
+        <div class="step-num">04</div>
+        <div class="step-body">
+          <h4><i class="fa-solid fa-chart-line"></i> 智能产线优化迭代</h4>
+          <p>同步开展工业数据采集、设备状态监测、产线故障排查与生产优化实训。通过分析仿真运行数据，研判产线运行瓶颈，优化生产节拍、提升设备综合效率，培养智能运维、精益生产与工业优化的核心工程能力。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 西门子专项 ===== -->
+<section class="siemens">
+  <div class="container">
+    <div class="section-tag" data-aos="fade-up">Siemens Program</div>
+    <h2 class="section-title" data-aos="fade-up">西门子智能制造通识体系</h2>
+    <p class="section-desc" data-aos="fade-up">
+      围绕工业自动化控制、产线工艺规划、设备联动逻辑、生产效能分析等核心内容，在虚拟仿真环境中完成从认知到实战的完整闭环。
+    </p>
+    <div class="siemens-grid">
+      <div class="siemens-card" data-aos="fade-up" data-aos-delay="0">
+        <h4><i class="fa-solid fa-industry"></i> 工业自动化控制</h4>
+        <p>以<strong>虚拟PLC</strong>为核心，完成设备信号交互、工序联动与闭环控制，理解自动化产线的控制逻辑。</p>
+      </div>
+      <div class="siemens-card" data-aos="fade-up" data-aos-delay="80">
+        <h4><i class="fa-solid fa-diagram-project"></i> 产线工艺规划</h4>
+        <p>参与<strong>虚拟产线建模、设备调试与工艺流程排布</strong>，在仿真环境中规划合理的生产路径与节拍。</p>
+      </div>
+      <div class="siemens-card" data-aos="fade-up" data-aos-delay="160">
+        <h4><i class="fa-solid fa-link"></i> 设备联动逻辑</h4>
+        <p>通过<strong>数字化虚拟工厂</strong>完整复刻真实工业生产流程，掌握设备之间的信号交互与协同机制。</p>
+      </div>
+      <div class="siemens-card" data-aos="fade-up" data-aos-delay="240">
+        <h4><i class="fa-solid fa-gauge-high"></i> 生产效能分析</h4>
+        <p>基于仿真运行数据进行<strong>瓶颈研判与生产节拍优化</strong>，提升设备综合效率，培养精益生产思维。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section id="join" class="cta">
+  <div class="container">
+    <h2 data-aos="fade-up">在科创实践中<br>锤炼本领，突破自我</h2>
+    <p data-aos="fade-up" data-aos-delay="80">
+      电气创新协会始终以实干赋能成长、以创新驱动突破。如果你对电气、机械、智能制造、电子或自动化充满好奇，这里就是你的起点。
+    </p>
+    <div data-aos="fade-up" data-aos-delay="160">
+     
+    </div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer>
+  <div class="container">
+    <div class="footer-brand"><i class="fa-solid fa-bolt" style="color: var(--accent);"></i> 电气创新协会</div>
+    <div>电气 · 机械 · 智能制造 · 电子 · 自动化</div>
+    <div style="margin-top: 8px; opacity: 0.55;">以实干赋能成长 · 以创新驱动突破</div>
+  </div>
+</footer>
+
+<!-- 国内 CDN：AOS 脚本 -->
+<script src="https://cdn.bootcdn.net/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+  AOS.init({
+    duration: 700,
+    easing: 'ease-out-cubic',
+    once: true,
+    offset: 60
+  });
+</script>
+
+</body>
+</html>
