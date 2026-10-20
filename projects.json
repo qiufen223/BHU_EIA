@@ -5,10 +5,23 @@
     "description": "基于物联网的配电柜实时监测系统，可对温度、电流、电压等参数进行异常预警，已完成两代原型机开发。",
     "status": "已完成",
     "image": "smart-grid.jpg",
+    "link": "detail-smart-grid.html", 
     "achievements": [
       { "date": "2024-02", "text": "完成需求分析与方案设计" },
       { "date": "2024-06", "text": "第一代原型机测试通过" },
       { "date": "2024-11", "text": "获得校创新创业大赛二等奖" }
+    ]
+  },
+  {
+    "id": "p2",
+    "name": "无线充电小车",
+    "description": "基于磁耦合谐振原理的无线供电小车，用于教学展示与创新实验，实现了10cm范围内的稳定充电。",
+    "status": "进行中",
+    "image": "wireless-car.jpg",
+    "link": "detail-wireless-car.html",
+    "achievements": [
+      { "date": "2024-09", "text": "完成电路仿真与线圈设计" },
+      { "date": "2025-01", "text": "实现10cm内稳定充电" }
     ]
   }
 ]
