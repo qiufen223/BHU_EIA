@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电气创新协会 · 项目与成果</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* ========== 全局样式 ========== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f0f4fa; font-family: 'Segoe UI', Roboto, system-ui, sans-serif; padding: 2rem 1.5rem; color: #1a2b3c; line-height: 1.5; }
+        .container { max-width: 1300px; margin: 0 auto; }
+
+        /* ========== 头部 ========== */
+        .header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: 2rem; gap: 1rem; }
+        .logo-area h1 { font-size: 2.2rem; font-weight: 600; letter-spacing: -0.5px; color: #0b2b4b; display: flex; align-items: center; gap: 0.75rem; }
+        .logo-area h1 i { color: #e6a017; font-size: 2rem; }
+        .logo-area .subhead { font-size: 1rem; color: #4a657f; margin-top: 0.35rem; font-weight: 400; border-left: 4px solid #e6a017; padding-left: 1rem; }
+        
+        .btn { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1.6rem; border-radius: 60px; font-weight: 500; font-size: 0.95rem; border: none; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 8px rgba(0, 20, 40, 0.08); background: white; color: #1e3b5a; border: 1px solid #d9e2ec; text-decoration: none; }
+        .btn i { font-size: 1rem; }
+        .btn-primary { background: #1e4a6b; color: white; border: 1px solid #1e4a6b; }
+        .btn-primary:hover { background: #0f3550; border-color: #0f3550; transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0, 40, 70, 0.15); }
+        .btn-secondary { background: white; color: #1e4a6b; }
+        .btn-secondary:hover { background: #e9f0f7; border-color: #b6c9db; transform: translateY(-2px); }
+
+        /* ========== 统计栏 ========== */
+        .stats-bar { display: flex; flex-wrap: wrap; gap: 1.5rem 3rem; background: white; padding: 1.2rem 2rem; border-radius: 40px; margin-bottom: 2.5rem; box-shadow: 0 6px 14px rgba(0, 20, 30, 0.05); border: 1px solid #dfe9f2; }
+        .stat-item { display: flex; align-items: center; gap: 0.8rem; }
+        .stat-item i { font-size: 1.6rem; color: #e6a017; width: 2rem; text-align: center; }
+        .stat-item .stat-text { font-weight: 500; color: #1e3b5a; }
+        .stat-item .stat-number { font-weight: 700; font-size: 1.3rem; color: #1e4a6b; margin-right: 0.2rem; }
+
+        /* ========== 项目网格 ========== */
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.8rem; margin-top: 0.5rem; }
+        
+        /* ========== 项目卡片 ========== */
+        .project-card { background: white; border-radius: 24px; box-shadow: 0 10px 22px rgba(0, 20, 40, 0.06); transition: all 0.25s ease; border: 1px solid #e3edf6; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+        .project-card:hover { transform: translateY(-6px); box-shadow: 0 20px 30px rgba(0, 40, 70, 0.12); border-color: #cbdae8; }
+
+        /* 新增：项目图片区域 */
+        .project-image { width: 100%; height: 160px; background: #eef5fc; display: flex; align-items: center; justify-content: center; overflow: hidden; border-bottom: 1px solid #e3edf6; color: #94aec6; font-size: 2.5rem; }
+        .project-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        .card-header { padding: 1.2rem 1.5rem 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: flex-start; }
+        .project-icon { background: #eef5fc; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 18px; color: #1e4a6b; font-size: 1.4rem; }
+        
+        .status-badge { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em; padding: 0.3rem 0.9rem; border-radius: 40px; background: #e6f3e6; color: #1f6c3b; border: 1px solid #b8ddb8; text-transform: uppercase; white-space: nowrap; }
+        .status-badge.ongoing { background: #fff2db; color: #9b6b00; border-color: #f0d8a8; }
+        .status-badge.concept { background: #eaeef5; color: #3b4e6b; border-color: #c8d4e3; }
+
+        .card-body { padding: 0.5rem 1.5rem 1rem 1.5rem; flex: 1; }
+        .project-title { font-size: 1.4rem; font-weight: 600; color: #0b2b4b; margin-bottom: 0.5rem; line-height: 1.3; }
+        .project-desc { font-size: 0.95rem; color: #3e5569; margin-bottom: 1rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+        /* 成果列表 */
+        .achievement-list { list-style: none; margin: 0.6rem 0 0 0; }
+        .achievement-list li { display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.88rem; padding: 0.3rem 0; color: #2a4055; border-bottom: 1px solid #eff5fb; }
+        .achievement-list li i { color: #e6a017; font-size: 0.8rem; margin-top: 0.3rem; }
+        .achievement-list li span { flex: 1; }
+        .achievement-list li .date-tag { font-size: 0.7rem; background: #eff5fb; padding: 0.15rem 0.5rem; border-radius: 20px; color: #4c6d8c; white-space: nowrap; margin-left: auto; font-weight: 500; }
+        .achievement-list li:last-child { border-bottom: none; }
+
+        .card-footer { padding: 0.8rem 1.5rem 1.2rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eef4fa; color: #4f6c86; font-size: 0.9rem; }
+        .footer-meta { display: flex; align-items: center; gap: 0.4rem; }
+        .footer-meta i { color: #94aec6; font-size: 0.8rem; }
+
+        /* 空状态 / 提示 */
+        .empty-note { text-align: center; padding: 3rem 1rem; background: #ffffffd9; border-radius: 32px; color: #5d7d9c; border: 2px dashed #c9daea; font-size: 1rem; margin-top: 1rem; grid-column: 1 / -1; }
+        .empty-note i { color: #e6a017; margin-right: 0.5rem; font-size: 1.2rem; }
+        .loading-spinner { display: inline-block; width: 2rem; height: 2rem; border: 4px solid #e1ebf5; border-top-color: #1e4a6b; border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 0.75rem; vertical-align: middle; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .update-hint { text-align: right; font-size: 0.8rem; color: #7d96ad; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: flex-end; gap: 0.4rem; }
+        .update-hint i { color: #94b0c9; }
+
+        @media (max-width: 600px) {
+            body { padding: 1.5rem 1rem; }
+            .header { flex-direction: column; align-items: flex-start; }
+            .logo-area h1 { font-size: 1.8rem; }
+            .stats-bar { padding: 1rem 1.5rem; }
+            .project-card { border-radius: 20px; }
+            .project-image { height: 140px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <div class="logo-area">
+                <h1><i class="fas fa-bolt"></i> 电气创新协会</h1>
+                <div class="subhead">项目 · 发展 · 成果</div>
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-secondary" id="refreshBtn"><i class="fas fa-sync-alt"></i> 刷新数据</button>
+                <a href="./projects.json" class="btn btn-primary" id="editJsonBtn" target="_blank" rel="noopener noreferrer"><i class="fas fa-edit"></i> 查看/编辑数据</a>
+            </div>
+        </div>
+
+        <!-- 统计栏 -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <i class="fas fa-diagram-project"></i>
+                <div class="stat-text"><span class="stat-number" id="projectCount">0</span> 个项目</div>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-check-circle"></i>
+                <div class="stat-text"><span class="stat-number" id="achievementCount">0</span> 项成果</div>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-clock"></i>
+                <div class="stat-text">数据加载于 <span id="lastUpdateTime">--:--</span></div>
+            </div>
+        </div>
+
+        <!-- 提示信息 -->
+        <div class="update-hint">
+            <i class="fas fa-info-circle"></i> 编辑同目录下的 <code>projects.json</code> 更新项目，图片存放于 <code>images/</code> 文件夹
+        </div>
+
+        <!-- 项目网格容器 -->
+        <div class="projects-grid" id="projectsGrid"></div>
+    </div>
+
+    <script>
+        (function() {
+            // ==================== 配置 ====================
+            const PROJECTS_JSON_PATH = './projects.json';
+            const IMAGES_FOLDER = './images/';
+            const PLACEHOLDER_ICON = '<i class="fas fa-microchip"></i>';
+
+            // 兜底演示数据 (如果 fetch 失败，即本地双击打开时)
+            const FALLBACK_DATA = [
+                {
+                    "id": "p1", "name": "智能配电监测系统 (演示)", "description": "基于物联网的配电柜实时监测系统，本地预览时展示的示例数据。", "status": "已完成", "image": "smart-grid.jpg",
+                    "achievements": [
+                        { "date": "2024-02", "text": "完成需求分析与方案设计" },
+                        { "date": "2024-06", "text": "第一代原型机测试通过" }
+                    ]
+                },
+                {
+                    "id": "p2", "name": "无线充电小车 (演示)", "description": "基于磁耦合谐振原理的无线供电小车，用于本地展示测试。", "status": "进行中", "image": "wireless-car.jpg",
+                    "achievements": [
+                        { "date": "2024-09", "text": "完成电路仿真与线圈设计" },
+                        { "date": "2025-01", "text": "实现10cm内稳定充电" }
+                    ]
+                }
+            ];
+
+            // DOM 元素
+            const projectsGrid = document.getElementById('projectsGrid');
+            const projectCountSpan = document.getElementById('projectCount');
+            const achievementCountSpan = document.getElementById('achievementCount');
+            const lastUpdateSpan = document.getElementById('lastUpdateTime');
+            const refreshBtn = document.getElementById('refreshBtn');
+            const editJsonBtn = document.getElementById('editJsonBtn');
+
+            // ==================== 工具函数 ====================
+            function escapeHtml(unsafe) {
+                if (!unsafe) return '';
+                return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+            }
+
+            function formatTime(date) {
+                return date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            }
+
+            function updateStats(projects) {
+                const totalProjects = projects.length;
+                let totalAchievements = 0;
+                projects.forEach(p => {
+                    if (p.achievements && Array.isArray(p.achievements)) {
+                        totalAchievements += p.achievements.length;
+                    }
+                });
+                projectCountSpan.textContent = totalProjects;
+                achievementCountSpan.textContent = totalAchievements;
+                lastUpdateSpan.textContent = formatTime(new Date());
+            }
+
+            function renderEmptyState(message, iconClass = 'fa-exclamation-triangle') {
+                projectsGrid.innerHTML = `<div class="empty-note"><i class="fas ${iconClass}"></i> ${message}</div>`;
+            }
+
+            function setEditJsonLink() {
+                const hostname = window.location.hostname;
+                const pathname = window.location.pathname;
+                if (hostname.endsWith('.github.io')) {
+                    const parts = pathname.split('/').filter(p => p !== '');
+                    if (parts.length >= 1) {
+                        const repoName = parts[0];
+                        const username = hostname.split('.')[0];
+                        editJsonBtn.href = `https://github.com/${username}/${repoName}/edit/main/projects.json`;
+                        return;
+                    }
+                }
+                editJsonBtn.href = PROJECTS_JSON_PATH;
+            }
+
+            // ==================== 图片加载处理 ====================
+            function getProjectImageHtml(project) {
+                if (project.image && typeof project.image === 'string' && project.image.trim() !== '') {
+                    const imagePath = IMAGES_FOLDER + project.image.trim();
+                    return `
+                        <div class="project-image">
+                            <img src="${escapeHtml(imagePath)}" alt="${escapeHtml(project.name)}" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='${PLACEHOLDER_ICON}';">
+                        </div>
+                    `;
+                } else {
+                    return `<div class="project-image">${PLACEHOLDER_ICON}</div>`;
+                }
+            }
+
+            // ==================== 渲染项目卡片 ====================
+            function renderProjects(projects) {
+                if (!projects || projects.length === 0) {
+                    renderEmptyState('还没有任何项目记录。请编辑 projects.json 文件添加项目数据。', 'fa-folder-open');
+                    return;
+                }
+
+                let html = '';
+                projects.forEach(project => {
+                    const achievements = Array.isArray(project.achievements) ? project.achievements : [];
+                    const statusClass = project.status === '进行中' ? 'ongoing' : (project.status === '概念阶段' ? 'concept' : '');
+                    const imageHtml = getProjectImageHtml(project);
+
+                    let achievementsHtml = '';
+                    if (achievements.length > 0) {
+                        achievementsHtml = '<ul class="achievement-list">';
+                        achievements.slice(0, 5).forEach(ach => {
+                            achievementsHtml += `
+                                <li>
+                                    <i class="fas fa-flag"></i>
+                                    <span>${escapeHtml(ach.text || '')}</span>
+                                    ${ach.date && ach.date !== '—' ? `<span class="date-tag">${escapeHtml(ach.date)}</span>` : ''}
+                                </li>
+                            `;
+                        });
+                        if (achievements.length > 5) {
+                            achievementsHtml += `<li style="color:#7d96ad; font-style:italic;"><i class="fas fa-ellipsis-h"></i> 还有 ${achievements.length - 5} 项成果…</li>`;
+                        }
+                        achievementsHtml += '</ul>';
+                    } else {
+                        achievementsHtml = '<p style="color:#94aec6; font-size:0.85rem; margin-top:0.5rem;"><i class="far fa-circle"></i> 暂无成果记录</p>';
+                    }
+
+                    html += `
+                        <div class="project-card" data-id="${escapeHtml(project.id || '')}">
+                            ${imageHtml}
+                            <div class="card-header">
+                                <div class="project-icon"><i class="fas fa-microchip"></i></div>
+                                <span class="status-badge ${statusClass}">${escapeHtml(project.status || '未知')}</span>
+                            </div>
+                            <div class="card-body">
+                                <h2 class="project-title">${escapeHtml(project.name || '未命名项目')}</h2>
+                                <p class="project-desc">${escapeHtml(project.description || '暂无描述')}</p>
+                                <div style="margin-top: 0.6rem; font-size:0.8rem; font-weight:600; color:#2a4b6e; letter-spacing:0.3px;">
+                                    <i class="fas fa-trophy" style="color:#e6a017; margin-right:4px;"></i> 发展成果
+                                </div>
+                                ${achievementsHtml}
+                            </div>
+                            <div class="card-footer">
+                                <div class="footer-meta">
+                                    <i class="far fa-calendar-alt"></i> 
+                                    <span>${achievements.length > 0 ? '近期有更新' : '等待记录'}</span>
+                                </div>
+                                <a href="${PROJECTS_JSON_PATH}" target="_blank" class="edit-btn" style="text-decoration:none;"><i class="fas fa-edit"></i> 查看数据</a>
+                            </div>
+                        </div>
+                    `;
+                });
+                projectsGrid.innerHTML = html;
+            }
+
+            // ==================== 加载数据 ====================
+            async function loadProjects() {
+                projectsGrid.innerHTML = `<div class="empty-note"><span class="loading-spinner"></span> 正在加载项目数据…</div>`;
+                projectCountSpan.textContent = '...';
+                achievementCountSpan.textContent = '...';
+                lastUpdateSpan.textContent = '加载中';
+
+                try {
+                    // 时间戳防止缓存
+                    const cacheBuster = `?t=${Date.now()}`;
+                    const response = await fetch(PROJECTS_JSON_PATH + cacheBuster);
+                    
+                    if (!response.ok) {
+                        if (response.status === 404) throw new Error('找不到 projects.json 文件，请确保该文件与 HTML 在同一目录下。');
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    let projectsArray = Array.isArray(data) ? data : (data.projects || []);
+                    if (!Array.isArray(projectsArray)) throw new Error('JSON 格式错误，必须是数组');
+
+                    projectsArray = projectsArray.map((p, index) => {
+                        if (!p.id) p.id = `proj_${index}_${Date.now()}`;
+                        if (!Array.isArray(p.achievements)) p.achievements = [];
+                        return p;
+                    });
+
+                    renderProjects(projectsArray);
+                    updateStats(projectsArray);
+                    setEditJsonLink();
+
+                } catch (error) {
+                    console.warn('Fetch 失败，启用本地演示数据:', error);
+                    
+                    // 判断是否是本地文件协议（file://）
+                    if (window.location.protocol === 'file:') {
+                        console.info('💡 提示：您正在直接双击打开 HTML 文件。浏览器安全策略阻止了读取 JSON。已自动启用【演示数据】。');
+                        console.info('👉 若要查看真实的 projects.json 数据，请使用 VS Code 的 Live Server，或部署到 GitHub Pages。');
+                        
+                        // 渲染演示数据
+                        renderProjects(FALLBACK_DATA);
+                        updateStats(FALLBACK_DATA);
+                        lastUpdateSpan.textContent = '演示模式';
+                        
+                        // 在页面上追加提示
+                        projectsGrid.insertAdjacentHTML('afterbegin', `
+                            <div style="grid-column: 1/-1; background: #fff3cd; color: #856404; padding: 12px 20px; border-radius: 12px; margin-bottom: 10px; font-size: 0.9rem; border: 1px solid #ffeeba; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-exclamation-circle" style="font-size: 1.2rem;"></i>
+                                <span><b>本地预览提示：</b> 出于浏览器安全限制，直接双击打开无法读取 JSON。当前显示的是<b>内置演示数据</b>。部署到 GitHub Pages 后即可正常显示。</span>
+                            </div>
+                        `);
+                    } else {
+                        // 如果是本地服务器或 Github Pages 依然失败，展示真实的错误提示
+                        renderEmptyState(`加载数据失败：${error.message}`, 'fa-exclamation-circle');
+                        lastUpdateSpan.textContent = '加载失败';
+                    }
+                    projectCountSpan.textContent = '0';
+                    achievementCountSpan.textContent = '0';
+                }
+            }
+
+            // ==================== 初始化 ====================
+            function init() {
+                loadProjects();
+                refreshBtn.addEventListener('click', loadProjects);
+                setEditJsonLink();
+            }
+
+            init();
+        })();
+    </script>
+</body>
+</html>
