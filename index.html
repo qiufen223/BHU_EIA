@@ -46,11 +46,12 @@
   .nav {
     position: fixed;
     top: 0; left: 0; right: 0;
-    z-index: 100;
+    z-index: 1000;
     background: rgba(7, 11, 18, 0.82);
     backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--line);
   }
+  
   .nav-inner {
     max-width: var(--max);
     margin: 0 auto;
@@ -59,7 +60,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
   }
+
   .nav-logo {
     font-weight: 800;
     font-size: 17px;
@@ -67,11 +70,20 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    z-index: 2;
   }
-  .nav-logo i { color: var(--accent); font-size: 20px; }
+
+  /* 包含链接和按钮的容器 */
+  .nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
   .nav-links { display: flex; gap: 28px; font-size: 14px; color: var(--muted); }
   .nav-links a { transition: color 0.2s; }
   .nav-links a:hover { color: var(--accent); }
+
   .nav-cta {
     font-size: 13px;
     padding: 7px 18px;
@@ -79,9 +91,81 @@
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
     color: #04101f;
     font-weight: 700;
+    transition: transform 0.2s, box-shadow 0.2s;
   }
-  @media (max-width: 720px) {
-    .nav-links { display: none; }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(61, 155, 255, 0.3);
+  }
+
+  /* 手机端菜单按钮（默认隐藏） */
+  .nav-toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.3s;
+    z-index: 2;
+  }
+  .nav-toggle:hover { color: var(--accent); }
+
+  /* 手机端响应式 */
+  @media (max-width: 768px) {
+    .nav-toggle { display: block; }
+
+    .nav-menu {
+      position: absolute;
+      top: 62px; 
+      left: 0;
+      right: 0;
+      background: rgba(7, 11, 18, 0.98);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0 24px;
+      gap: 0;
+      /* 默认隐藏及过渡动画 */
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.35s ease-in-out;
+    }
+
+    .nav-menu.active {
+      max-height: 400px; 
+      opacity: 1;
+      visibility: visible;
+      padding: 20px 24px 30px;
+    }
+
+    .nav-links {
+      flex-direction: column;
+      width: 100%;
+      gap: 0;
+    }
+
+    .nav-links a {
+      display: block;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 15px;
+      width: 100%;
+    }
+    
+    .nav-links a:last-child { border-bottom: none; }
+
+    .nav-cta {
+      width: 100%;
+      text-align: center;
+      margin-top: 20px;
+      padding: 12px 0;
+      display: block;
+    }
   }
 
   /* ========== Hero ========== */
@@ -500,13 +584,22 @@
        <img src="images/logo.png" alt="Logo" style="width: 50px; height: 50px; object-fit: contain;">
       电气创新协会
     </div>
-    <div class="nav-links">
-      <a href="GuanYuXieHui.html">关于协会</a>
-      <a href="notice.html">公告动态</a>
-      <a href="1.html">发展成果</a>
-      <a href="#system">后台访问</a>
+    
+    <!-- 手机端菜单按钮 -->
+    <button class="nav-toggle" id="navToggle" aria-label="打开菜单">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <!-- 导航菜单容器 -->
+    <div class="nav-menu" id="navMenu">
+      <div class="nav-links">
+        <a href="GuanYuXieHui.html">关于协会</a>
+        <a href="notice.html">公告动态</a>
+        <a href="1.html">发展成果</a>
+        <a href="http://192.168.1.100:3000" target="_blank">后台访问</a>
+      </div>
+      <a href="#join" class="nav-cta">闪回</a>
     </div>
-    <a href="#join" class="nav-cta">闪回</a>
   </div>
 </nav>
 
@@ -769,12 +862,47 @@
 
 <!-- 国内 CDN：AOS 脚本 -->
 <script src="https://cdn.bootcdn.net/ajax/libs/aos/2.3.4/aos.js"></script>
+
+<!-- AOS 动画初始化 & 导航菜单交互 -->
 <script>
+  // 初始化 AOS 动画
   AOS.init({
     duration: 700,
     easing: 'ease-out-cubic',
     once: true,
     offset: 60
+  });
+
+  // 移动端导航菜单交互
+  document.addEventListener('DOMContentLoaded', () => {
+    const navToggle = document.getElementById('navToggle');
+    const navMenu = document.getElementById('navMenu');
+    const icon = navToggle.querySelector('i');
+
+    if (navToggle && navMenu) {
+      navToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+        
+        // 切换图标（汉堡 和 关闭叉号）
+        if (navMenu.classList.contains('active')) {
+          icon.classList.remove('fa-bars');
+          icon.classList.add('fa-xmark');
+        } else {
+          icon.classList.remove('fa-xmark');
+          icon.classList.add('fa-bars');
+        }
+      });
+
+      // 点击菜单中的链接后，自动收起菜单
+      const navLinks = navMenu.querySelectorAll('a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          navMenu.classList.remove('active');
+          icon.classList.remove('fa-xmark');
+          icon.classList.add('fa-bars');
+        });
+      });
+    }
   });
 </script>
 
