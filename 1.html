@@ -60,6 +60,32 @@
         .achievement-list li .date-tag { font-size: 0.7rem; background: #eff5fb; padding: 0.15rem 0.5rem; border-radius: 20px; color: #4c6d8c; white-space: nowrap; margin-left: auto; font-weight: 500; }
         .achievement-list li:last-child { border-bottom: none; }
 
+        /* ========== 新增：展开更多按钮的样式 ========== */
+        .btn-expand {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 0.8rem;
+            font-weight: 500;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            border: 1px dashed #cbd5e1;
+            cursor: pointer;
+            margin-top: 0.6rem;
+            transition: all 0.2s;
+            width: 100%;
+            justify-content: center;
+        }
+        .btn-expand:hover {
+            background: #eff6ff;
+            color: #3b82f6;
+            border-color: #93c5fd;
+        }
+        .btn-expand i { transition: transform 0.2s; }
+        .btn-expand.expanded i { transform: rotate(180deg); }
+
         /* 卡片底部 */
         .card-footer { padding: 0.8rem 1.5rem 1.2rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eef4fa; color: #4f6c86; font-size: 0.9rem; }
         .footer-meta { display: flex; align-items: center; gap: 0.4rem; }
@@ -93,7 +119,7 @@
         <!-- 头部 -->
         <div class="header">
             <div class="logo-area">
-                <h1> <img src="images/logo.png" alt="Logo" style="width: 50px; height: 5-px; object-fit: contain;"> 电气创新协会</h1>
+                <h1> <img src="images/logo.png" alt="Logo" style="width: 50px; height: 50px; object-fit: contain;"> 电气创新协会</h1>
                 <div class="subhead">项目 · 发展 · 成果</div>
             </div>
             <div class="action-buttons">
@@ -133,7 +159,6 @@
             const IMAGES_FOLDER = './images/';
             const PLACEHOLDER_ICON = '<i class="fas fa-microchip"></i>';
 
-            // 本地兜底数据
             const FALLBACK_DATA = [
                 {
                     "id": "p1", "name": "智能配电监测系统 (演示)", "description": "基于物联网的配电柜实时监测系统。", "status": "已完成", "image": "smart-grid.jpg", "link": "#",
@@ -203,7 +228,7 @@
                 }
 
                 let html = '';
-                projects.forEach(project => {
+                projects.forEach((project, idx) => {
                     const achievements = Array.isArray(project.achievements) ? project.achievements : [];
                     const statusClass = project.status === '进行中' ? 'ongoing' : (project.status === '概念阶段' ? 'concept' : '');
                     const imageHtml = getProjectImageHtml(project);
@@ -213,14 +238,29 @@
 
                     let achievementsHtml = '';
                     if (achievements.length > 0) {
-                        achievementsHtml = '<ul class="achievement-list">';
+                        achievementsHtml = `<ul class="achievement-list" id="ach-list-${idx}">`;
+                        // 渲染前 5 项
                         achievements.slice(0, 5).forEach(ach => {
                             achievementsHtml += `<li><i class="fas fa-flag"></i><span>${escapeHtml(ach.text || '')}</span>${ach.date && ach.date !== '—' ? `<span class="date-tag">${escapeHtml(ach.date)}</span>` : ''}</li>`;
                         });
+                        
+                        // 超过 5 项的部分，隐藏渲染
                         if (achievements.length > 5) {
-                            achievementsHtml += `<li style="color:#7d96ad; font-style:italic;"><i class="fas fa-ellipsis-h"></i> 还有 ${achievements.length - 5} 项成果…</li>`;
+                            achievements.slice(5).forEach(ach => {
+                                achievementsHtml += `<li class="hidden-item" style="display: none;"><i class="fas fa-flag"></i><span>${escapeHtml(ach.text || '')}</span>${ach.date && ach.date !== '—' ? `<span class="date-tag">${escapeHtml(ach.date)}</span>` : ''}</li>`;
+                            });
                         }
                         achievementsHtml += '</ul>';
+
+                        // 渲染展开按钮
+                        if (achievements.length > 5) {
+                            achievementsHtml += `
+                                <button class="btn-expand" data-target="ach-list-${idx}" data-total="${achievements.length - 5}">
+                                    <span class="expand-text">还有 ${achievements.length - 5} 项成果...</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                            `;
+                        }
                     } else {
                         achievementsHtml = '<p style="color:#94aec6; font-size:0.85rem; margin-top:0.5rem;"><i class="far fa-circle"></i> 暂无成果记录</p>';
                     }
@@ -245,7 +285,6 @@
                                     <i class="far fa-calendar-alt"></i> 
                                     <span>${achievements.length > 0 ? '近期有更新' : '等待记录'}</span>
                                 </div>
-                                <!-- 新增的跳转按钮 -->
                                 ${hasLink 
                                     ? `<a href="${detailLink}" class="btn-detail">查看详情 <i class="fas fa-arrow-right"></i></a>`
                                     : `<span class="btn-detail" style="background:transparent; color:#94aec6; cursor:not-allowed;">暂无详情</span>`
@@ -255,6 +294,30 @@
                     `;
                 });
                 projectsGrid.innerHTML = html;
+
+                // ========== 核心：绑定展开按钮的点击事件 ==========
+                document.querySelectorAll('.btn-expand').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const targetId = this.getAttribute('data-target');
+                        const list = document.getElementById(targetId);
+                        const hiddenItems = list.querySelectorAll('.hidden-item');
+                        const isExpanded = this.classList.contains('expanded');
+                        const textSpan = this.querySelector('.expand-text');
+                        const total = this.getAttribute('data-total');
+
+                        if (isExpanded) {
+                            // 收起
+                            hiddenItems.forEach(item => item.style.display = 'none');
+                            this.classList.remove('expanded');
+                            textSpan.textContent = `还有 ${total} 项成果...`;
+                        } else {
+                            // 展开
+                            hiddenItems.forEach(item => item.style.display = 'flex');
+                            this.classList.add('expanded');
+                            textSpan.textContent = `收起成果`;
+                        }
+                    });
+                });
             }
 
             async function loadProjects() {
@@ -275,27 +338,20 @@
                     let projectsArray = Array.isArray(data) ? data : (data.projects || []);
                     if (!Array.isArray(projectsArray)) throw new Error('JSON 格式错误，必须是数组');
 
-                    // ==========================================
-                    // 【核心逻辑】：根据 JSON 中手动写入的 id (如 p1, p10)
-                    // 提取出数字部分，进行从大到小（降序）排列
-                    // 这样数字最大的 p*(最新) 就会排在最前面
-                    // ==========================================
+                    // 按照 ID (p1, p2, p10) 里的数字降序排列，数字最大的（最新）在前
                     projectsArray.sort((a, b) => {
                         const getNum = (idStr) => {
                             if (!idStr) return 0;
-                            // 匹配字符串中的数字部分，比如 "p10" -> 10
                             const match = idStr.match(/\d+/); 
                             return match ? parseInt(match[0], 10) : 0;
                         };
                         return getNum(b.id) - getNum(a.id);
                     });
 
-                    // 确保每个项目都有 achievements 数组
                     projectsArray = projectsArray.map(p => {
                         if (!Array.isArray(p.achievements)) p.achievements = [];
                         return p;
                     });
-                    // ==========================================
 
                     renderProjects(projectsArray);
                     updateStats(projectsArray);
@@ -310,7 +366,7 @@
                         projectsGrid.insertAdjacentHTML('afterbegin', `
                             <div style="grid-column: 1/-1; background: #fff3cd; color: #856404; padding: 12px 20px; border-radius: 12px; margin-bottom: 10px; font-size: 0.9rem; border: 1px solid #ffeeba; display: flex; align-items: center; gap: 10px;">
                                 <i class="fas fa-exclamation-circle" style="font-size: 1.2rem;"></i>
-                                <span><b>本地预览提示：</b> 直接双击打开无法读取 JSON。当前显示内置演示数据。部署到 GitHub Pages 后即可正常。</span>
+                                <span><b>本地预览提示：</b> 直接双击打开无法读取 JSON。当前显示内置演示数据。部署到服务器后即可正常。</span>
                             </div>
                         `);
                     } else {
