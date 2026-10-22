@@ -1,27 +1,15 @@
 [
   {
     "id": "p1",
-    "name": "智能配电监测系统",
-    "description": "基于物联网的配电柜实时监测系统，可对温度、电流、电压等参数进行异常预警，已完成两代原型机开发。",
+    "name": "2026第第二十届西门子杯中国智能制造挑战赛",
+    "description": "学院通识方向队伍获国赛二等奖，省赛共斩获55项奖项，参赛主力来自电气创新协会。",
     "status": "已完成",
-    "image": "smart-grid.jpg",
-    "link": "detail-smart-grid.html", 
+    "image": "CIMC.png",
+    "link": "https://jdgcxy.qdbhu.edu.cn/info/1141/8741.htm", 
     "achievements": [
-      { "date": "2024-02", "text": "完成需求分析与方案设计" },
-      { "date": "2024-06", "text": "第一代原型机测试通过" },
-      { "date": "2024-11", "text": "获得校创新创业大赛二等奖" }
-    ]
-  },
-  {
-    "id": "p2",
-    "name": "无线充电小车",
-    "description": "基于磁耦合谐振原理的无线供电小车，用于教学展示与创新实验，实现了10cm范围内的稳定充电。",
-    "status": "进行中",
-    "image": "wireless-car.jpg",
-    "link": "detail-wireless-car.html",
-    "achievements": [
-      { "date": "2024-09", "text": "完成电路仿真与线圈设计" },
-      { "date": "2025-01", "text": "实现10cm内稳定充电" }
+      { "date": "2025-11", "text": "完成第一次校赛评比与指导" },
+      { "date": "2026-03", "text": "正式进行虚拟工厂单元的学习与指导" },
+      { "date": "2026-07", "text": "第二十届西门子杯省赛通识赛项在青岛滨海学院内举办" }
     ]
   }
 ]
