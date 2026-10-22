@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "id": "p4",
     "isTop": true,
     "title": "2024年秋季纳新宣讲会即将开启",
     "desc": "零基础可参与，不限专业！宣讲会将详细介绍协会的三大核心技术赛道...",
@@ -8,10 +8,23 @@
     "location": "智能制造与材料学院报告厅",
     "tag": "置顶公告",
     "tagColor": "green",
-    "link": "https://www.baidu.com" 
+    "link": "https://www.baidu.com",
+    "isExpired": false
   },
   {
-    "id": 2,
+    "id": "p3",
+    "isTop": false,
+    "title": "关于举办暑期集训的通知",
+    "desc": "暑期集训将在下周一开始，请各位项目组长做好排期。",
+    "date": "2024-08-20",
+    "location": "线上",
+    "tag": "内部通知",
+    "tagColor": "blue",
+    "link": "",
+    "isExpired": false
+  },
+  {
+    "id": "p2",
     "isTop": false,
     "title": "第十九届“挑战杯”省赛获奖喜报",
     "desc": "PCBA视觉检测项目组荣获省级二等奖，指导老师：薛彬、王国政、马淑芳...",
@@ -19,17 +32,19 @@
     "location": "线上公示",
     "tag": "赛事喜报",
     "tagColor": "orange",
-    "link": "detail.html?id=2"
+    "link": "detail.html?id=2",
+    "isExpired": false
   },
   {
-    "id": 3,
+    "id": "p1",
     "isTop": false,
-    "title": "1111111",
-    "desc": "PCBA视觉检测项目组荣获省级二等奖，指导老师：薛彬、王国政、马淑芳...",
-    "date": "2024-08-19",
-    "location": "线上公示",
-    "tag": "赛事喜报",
-    "tagColor": "orange",
-    "link": "detail.html?id=2"
+    "title": "2023年秋季纳新（已结束）",
+    "desc": "2023年纳新工作已全面结束。",
+    "date": "2023-09-15",
+    "location": "校内",
+    "tag": "历史公告",
+    "tagColor": "blue",
+    "link": "",
+    "isExpired": true
   }
 ]

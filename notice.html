@@ -159,8 +159,6 @@
             flex-direction: column;
             justify-content: center;
             transition: transform 0.3s, box-shadow 0.3s;
-            
-            /* 修复由于改成 <a> 标签带来的默认样式问题 */
             text-decoration: none; 
             color: #e2e8f0;
         }
@@ -169,6 +167,12 @@
             transform: translateY(-5px);
             box-shadow: 0 15px 40px rgba(0, 210, 255, 0.08);
             border-color: rgba(0, 210, 255, 0.4);
+        }
+
+        /* 失效状态的置顶卡片 */
+        .featured-notice.expired {
+            opacity: 0.6;
+            filter: grayscale(80%);
         }
 
         .featured-glow {
@@ -218,6 +222,8 @@
             font-size: 13px;
             margin-bottom: 10px;
             z-index: 2;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         /* --- 常规公告列表 --- */
@@ -234,7 +240,7 @@
             border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 12px;
             padding: 20px 25px;
-            text-decoration: none; /* 去除下划线 */
+            text-decoration: none;
             color: inherit;
             transition: all 0.3s;
         }
@@ -243,6 +249,12 @@
             background: rgba(255, 255, 255, 0.04);
             border-color: rgba(0, 210, 255, 0.3);
             transform: translateX(5px);
+        }
+
+        /* 失效状态的列表项 */
+        .list-item.expired {
+            opacity: 0.55;
+            filter: grayscale(50%);
         }
 
         .date-box {
@@ -271,6 +283,7 @@
 
         .content-box {
             flex: 1;
+            min-width: 0;
         }
 
         .content-box h3 {
@@ -279,6 +292,9 @@
             margin-bottom: 6px;
             font-weight: 500;
             transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .list-item:hover .content-box h3 {
@@ -297,7 +313,7 @@
         .action-box {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
             margin-left: 15px;
         }
 
@@ -311,6 +327,17 @@
         .tag-label.blue { background: rgba(0, 210, 255, 0.1); color: #00d2ff; }
         .tag-label.green { background: rgba(0, 255, 170, 0.1); color: #00ffaa; }
         .tag-label.orange { background: rgba(255, 150, 50, 0.1); color: #ff9632; }
+        
+        /* 新增：失效标签 */
+        .tag-expired {
+            background: rgba(255, 255, 255, 0.1);
+            color: #a0aec0;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            white-space: nowrap;
+        }
 
         .arrow-icon {
             color: #4a5568;
@@ -323,6 +350,29 @@
             transform: translateX(5px);
         }
 
+        /* 自动刷新提示 */
+        .refresh-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 210, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            color: #00d2ff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s;
+            pointer-events: none;
+            z-index: 999;
+        }
+        .refresh-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* 响应式 */
         @media (max-width: 768px) {
             .page-header h1 { font-size: 2.2rem; }
@@ -330,6 +380,7 @@
             .date-box { border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-right: 0; padding-bottom: 8px; margin-right: 0; flex-direction: row; gap: 10px; align-items: baseline; }
             .action-box { width: 100%; justify-content: space-between; margin-left: 0; }
             .content-box p { white-space: normal; }
+            .content-box h3 { flex-direction: column; align-items: flex-start; gap: 4px; }
         }
     </style>
 </head>
@@ -356,44 +407,59 @@
         <div class="loading-state" id="loading">加载数据中...</div>
     </div>
 
+    <!-- 自动刷新提示 -->
+    <div class="refresh-toast" id="refreshToast">✨ 公告已自动更新</div>
+
     <!-- 核心渲染逻辑 -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const container = document.getElementById('notice-container');
             const loading = document.getElementById('loading');
+            const toast = document.getElementById('refreshToast');
+            let isFirstLoad = true;
 
-            // 请求本地 JSON 文件
-            fetch('./notices.json')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('网络请求错误，请确保 notices.json 文件存在且运行在本地服务器环境下。');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    loading.style.display = 'none'; // 隐藏加载状态
+            // 提取 P* 里的数字用于排序
+            function getIdNumber(idStr) {
+                if (!idStr) return 0;
+                const match = String(idStr).match(/\d+/);
+                return match ? parseInt(match[0], 10) : 0;
+            }
+
+            // 提取数据并渲染的函数
+            async function fetchAndRender() {
+                try {
+                    // 添加时间戳防止浏览器缓存
+                    const response = await fetch(`./notices.json?t=${Date.now()}`);
+                    if (!response.ok) throw new Error('网络请求错误');
+                    
+                    const data = await response.json();
                     
                     if (!data || data.length === 0) {
                         container.innerHTML = '<div class="empty-state">暂无公告发布</div>';
                         return;
                     }
 
+                    // 1. 区分置顶和非置顶
+                    let topNotice = data.find(item => item.isTop === true);
+                    let normalNotices = data.filter(item => item.isTop !== true);
+
+                    // 2. 对非置顶公告按照 P* 数字降序排列 (数字大的在前面)
+                    normalNotices.sort((a, b) => getIdNumber(b.id) - getIdNumber(a.id));
+
                     let html = '';
-                    
-                    // 1. 寻找置顶公告 (isTop === true)
-                    const topNotice = data.find(item => item.isTop);
-                    const normalNotices = data.filter(item => !item.isTop);
 
                     // ================= 渲染置顶卡片 =================
                     if (topNotice) {
-                        // 检查是否写了 link，如果没写就默认填 # (防止点击报错)
                         const topLink = topNotice.link ? topNotice.link : '#'; 
+                        const isExpired = topNotice.isExpired === true;
+                        const expiredClass = isExpired ? 'expired' : '';
+                        const expiredTag = isExpired ? `<span class="tag-expired" style="margin-left:10px;">已失效</span>` : '';
                         
                         html += `
-                            <a href="${topLink}" class="featured-notice">
+                            <a href="${topLink}" class="featured-notice ${expiredClass}">
                                 <div class="featured-glow"></div>
                                 <div class="badge-top">🔥 ${topNotice.tag || '置顶公告'}</div>
-                                <h2>${topNotice.title}</h2>
+                                <h2>${topNotice.title} ${expiredTag}</h2>
                                 <p>${topNotice.desc}</p>
                                 <div class="meta-info">
                                     <span>📅 ${topNotice.date}</span>
@@ -407,22 +473,25 @@
                     if (normalNotices.length > 0) {
                         html += `<div class="notice-list">`;
                         normalNotices.forEach(item => {
-                            const dateParts = item.date.split('-'); 
+                            // 兼容处理日期切割
+                            const dateParts = item.date ? item.date.split('-') : ['0000', '00', '00']; 
                             const yearMonth = `${dateParts[0]}.${dateParts[1]}`;
                             const day = dateParts[2];
                             const tagClass = item.tagColor || 'blue'; 
-                            
-                            // 检查是否写了 link，没写就填 #
                             const itemLink = item.link ? item.link : '#'; 
+                            
+                            const isExpired = item.isExpired === true;
+                            const expiredClass = isExpired ? 'expired' : '';
+                            const expiredTag = isExpired ? `<span class="tag-expired">已失效</span>` : '';
 
                             html += `
-                                <a href="${itemLink}" class="list-item">
+                                <a href="${itemLink}" class="list-item ${expiredClass}">
                                     <div class="date-box">
                                         <span class="date-day">${day}</span>
                                         <span class="date-ym">${yearMonth}</span>
                                     </div>
                                     <div class="content-box">
-                                        <h3>${item.title}</h3>
+                                        <h3>${item.title} ${expiredTag}</h3>
                                         <p>${item.desc}</p>
                                     </div>
                                     <div class="action-box">
@@ -437,20 +506,48 @@
 
                     // 注入 DOM
                     container.innerHTML = html;
-                })
-                .catch(error => {
-                    loading.style.display = 'none';
+
+                    // 如果是首次加载，隐藏 loading 提示
+                    if (isFirstLoad) {
+                        loading.style.display = 'none';
+                        isFirstLoad = false;
+                    } else {
+                        // 非首次加载（自动刷新），弹出 toast 提示
+                        showToast();
+                    }
+
+                } catch (error) {
                     console.error('加载公告失败:', error);
-                    container.innerHTML = `
-                        <div class="empty-state" style="color: #ff6b6b; border-color: rgba(255,107,107,0.3);">
-                            <strong>加载失败：</strong><br>
-                            ${error.message} <br><br>
-                            <span style="font-size: 12px; color: #a0aec0;">
-                                提示：由于浏览器安全限制（CORS），请使用 VS Code 的 Live Server 插件运行，或部署到 Nginx/Apache 服务器上访问。
-                            </span>
-                        </div>
-                    `;
-                });
+                    if (isFirstLoad) {
+                        loading.style.display = 'none';
+                        container.innerHTML = `
+                            <div class="empty-state" style="color: #ff6b6b; border-color: rgba(255,107,107,0.3);">
+                                <strong>加载失败：</strong><br>
+                                ${error.message} <br><br>
+                                <span style="font-size: 12px; color: #a0aec0;">
+                                    提示：请使用本地服务器环境（如 Live Server）运行，或部署到 Nginx/Apache。
+                                </span>
+                            </div>
+                        `;
+                    }
+                }
+            }
+
+            // 弹出提示
+            let toastTimer;
+            function showToast() {
+                toast.classList.add('show');
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2500);
+            }
+
+            // 初始化执行
+            fetchAndRender();
+
+            // 设置 30 秒定时器自动拉取
+            setInterval(fetchAndRender, 30000);
         });
     </script>
 </body>
