@@ -276,11 +276,20 @@
                     let projectsArray = Array.isArray(data) ? data : (data.projects || []);
                     if (!Array.isArray(projectsArray)) throw new Error('JSON 格式错误，必须是数组');
 
+                    // ==========================================
+                    // 【仅在此处增加了自动编号逻辑】
+                    // 逻辑：遍历数组，如果数组里最新的在最前面（即 index 为 0），
+                    // 那么根据总长度倒序分配编号，最新的是 p(总长)，最旧的是 p1。
+                    // ==========================================
+                    const totalProjects = projectsArray.length;
                     projectsArray = projectsArray.map((p, index) => {
                         if (!p.id) p.id = `proj_${index}_${Date.now()}`;
+                        // 自动计算编号 p1, p2, p3...
+                        p.id = `p${totalProjects - index}`;
                         if (!Array.isArray(p.achievements)) p.achievements = [];
                         return p;
                     });
+                    // ==========================================
 
                     renderProjects(projectsArray);
                     updateStats(projectsArray);
