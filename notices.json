@@ -1,7 +1,7 @@
 [
   {
     "id": "p4",
-    "isTop": true,
+    "isTop": false,
     "title": "2024年秋季纳新宣讲会即将开启",
     "desc": "零基础可参与，不限专业！宣讲会将详细介绍协会的三大核心技术赛道...",
     "date": "2024-09-15",
@@ -9,7 +9,7 @@
     "tag": "置顶公告",
     "tagColor": "green",
     "link": "https://www.baidu.com",
-    "isExpired": false
+    "isExpired": true
   },
   {
     "id": "p3",
@@ -21,7 +21,7 @@
     "tag": "内部通知",
     "tagColor": "blue",
     "link": "",
-    "isExpired": false
+    "isExpired": true
   },
   {
     "id": "p2",
@@ -33,7 +33,7 @@
     "tag": "赛事喜报",
     "tagColor": "orange",
     "link": "detail.html?id=2",
-    "isExpired": false
+    "isExpired": true
   },
   {
     "id": "p1",
@@ -46,5 +46,17 @@
     "tagColor": "blue",
     "link": "",
     "isExpired": true
+  },
+   {
+    "id": "p5",
+    "isTop": true,
+    "title": "2026电气创新协会换届仪式",
+    "desc": "2025届学生开始介入电气创新协会管理层，仪式时间定于2026年10月24日下午2时",
+    "date": "2026-10-22",
+    "location": "青岛滨海学院小珠山校区第三报告厅",
+    "tag": "置顶公告",
+    "tagColor": "red",
+    "link": "#",
+    "isExpired": false
   }
 ]
