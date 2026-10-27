@@ -57,6 +57,6 @@
     "tag": "置顶公告",
     "tagColor": "red",
     "link": "#",
-    "isExpired": false
+    "isExpired": true
   }
 ]
