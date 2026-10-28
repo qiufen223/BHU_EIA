@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分类导航 - 电气创新协会</title>
+    <!-- 引入 FontAwesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* ================= 基础重置 ================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: #0b1320; color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+            line-height: 1.8; padding-bottom: 60px;
+            /* 深色网格背景 */
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        /* ================= 导航栏 ================= */
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 5%; background-color: rgba(11, 19, 32, 0.85);
+            backdrop-filter: blur(10px); position: fixed; width: 100%; top: 0; left: 0;
+            z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .logo {
+            font-size: 20px; font-weight: bold; display: flex; align-items: center; gap: 10px;
+            color: #fff; text-decoration: none;
+        }
+        .logo svg { width: 24px; height: 24px; stroke: #00d2ff; fill: none; }
+        .btn-back {
+            background: rgba(255, 255, 255, 0.05); color: #a0aec0;
+            padding: 8px 24px; border-radius: 20px; text-decoration: none; font-size: 14px;
+            border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s;
+        }
+        .btn-back:hover { background: rgba(0, 210, 255, 0.1); color: #00d2ff; }
+
+        /* ================= 页面头部 ================= */
+        .page-header { text-align: center; padding: 140px 5% 60px; position: relative; }
+        .page-header h1 { font-size: 3rem; font-weight: 800; color: #ffffff; margin-bottom: 15px; letter-spacing: 2px; }
+        .page-header p { color: #a0aec0; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+        
+        /* 顶部发光效果 */
+        .glow-bg {
+            position: absolute; top: 50px; left: 50%; transform: translateX(-50%);
+            width: 400px; height: 200px; background: #00d2ff;
+            filter: blur(120px); opacity: 0.15; border-radius: 50%; z-index: -1;
+        }
+
+        /* ================= 卡片网格容器 ================= */
+        .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+        .grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+
+        /* ================= 分类卡片样式 ================= */
+        .category-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 40px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            group: hover; /* 占位 */
+        }
+
+        /* 卡片悬浮发光效果 */
+        .category-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(0, 210, 255, 0.3);
+            box-shadow: 0 15px 40px rgba(0, 210, 255, 0.08);
+        }
+
+        /* 卡片顶部装饰线 */
+        .category-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, #00d2ff, #00ffaa); opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .category-card:hover::before { opacity: 1; }
+
+        /* 图标样式 */
+        .card-icon {
+            width: 56px; height: 56px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px; margin-bottom: 20px;
+        }
+
+        /* 根据 JSON 设置的不同颜色 */
+        .color-blue .card-icon { background: rgba(0, 210, 255, 0.1); color: #00d2ff; border: 1px solid rgba(0, 210, 255, 0.2); }
+        .color-green .card-icon { background: rgba(0, 255, 170, 0.1); color: #00ffaa; border: 1px solid rgba(0, 255, 170, 0.2); }
+        .color-orange .card-icon { background: rgba(255, 150, 50, 0.1); color: #ff9632; border: 1px solid rgba(255, 150, 50, 0.2); }
+        .color-purple .card-icon { background: rgba(180, 100, 255, 0.1); color: #b464ff; border: 1px solid rgba(180, 100, 255, 0.2); }
+
+        .category-card h2 { font-size: 1.5rem; color: #ffffff; font-weight: 700; margin-bottom: 12px; }
+        .category-card p { font-size: 14px; color: #a0aec0; line-height: 1.6; margin-bottom: 20px; }
+        
+        .card-action {
+            margin-top: auto; font-size: 14px; font-weight: bold; color: #00d2ff;
+            display: flex; align-items: center; gap: 8px;
+            transition: gap 0.3s;
+        }
+        .category-card:hover .card-action { gap: 12px; }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .grid-container { grid-template-columns: 1fr; }
+            .page-header h1 { font-size: 2.2rem; }
+            .category-card { padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 导航栏 -->
+    <header>
+        <a href="index.html" class="logo">
+<img src="images/logo.png" alt="Logo"
+                    style="width: 50px; height: 50px; object-fit: contain;">
+            </rect><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"></path></svg>
+            电气创新协会
+        </a>
+        <a href="index.html" class="btn-back">返回首页</a>
+    </header>
+
+    <!-- 页头 -->
+    <section class="page-header">
+        <div class="glow-bg"></div>
+        <h1>全站导航</h1>
+        <p>按照分类快速查找你感兴趣的活动纪实与科创成果</p>
+    </section>
+
+    <!-- 分类卡片容器 -->
+    <main class="container">
+        <div class="grid-container" id="categoryGrid">
+            <!-- 这里的内容会被 JS 自动读取 JSON 后渲染进去 -->
+            <p style="color: #718096;">正在加载分类数据...</p>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const grid = document.getElementById('categoryGrid');
+
+            // 读取 categories.json 文件
+            fetch('./categories.json')
+                .then(response => {
+                    if (!response.ok) throw new Error('网络请求失败');
+                    return response.json();
+                })
+                .then(data => {
+                    grid.innerHTML = ''; // 清空加载提示
+
+                    if (!data || data.length === 0) {
+                        grid.innerHTML = '<p style="color: #718096;">暂无分类数据，请编辑 categories.json。</p>';
+                        return;
+                    }
+
+                    // 循环遍历 JSON 数据，生成卡片 HTML
+                    data.forEach(item => {
+                        // 构造卡片的 DOM 元素
+                        const card = document.createElement('a');
+                        // 设置链接，如果 JSON 没写 link，就默认跳转到 #
+                        card.href = item.link ? item.link : '#';
+                        // 加上基础类名和动态颜色类名 (如 color-blue)
+                        card.className = `category-card color-${item.color || 'blue'}`;
+
+                        // 填充卡片内部内容
+                        card.innerHTML = `
+                            <div class="card-icon">
+                                <i class="fas ${item.icon || 'fa-folder'}"></i>
+                            </div>
+                            <h2>${item.title || '未命名分类'}</h2>
+                            <p>${item.desc || '暂无描述信息...'}</p>
+                            <div class="card-action">
+                                点击进入 <i class="fas fa-arrow-right"></i>
+                            </div>
+                        `;
+
+                        // 将卡片塞入容器
+                        grid.appendChild(card);
+                    });
+                })
+                .catch(error => {
+                    console.error('加载分类失败:', error);
+                    grid.innerHTML = `
+                        <div style="grid-column: 1 / -1; color: #ff6b6b; padding: 30px; text-align: center; background: rgba(255,107,107,0.1); border-radius: 12px;">
+                            <strong>加载失败：</strong> 无法读取 categories.json。<br>
+                            <span style="font-size: 13px; color: #a0aec0;">请确保文件存在，且运行在本地服务器环境（如 Live Server）中。</span>
+                        </div>
+                    `;
+                });
+        });
+    </script>
+</body>
+</html>
