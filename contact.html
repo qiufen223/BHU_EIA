@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>联系我们 - 电气创新协会</title>
+    <!-- 引入 FontAwesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* ================= 基础重置 ================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: #0b1320; color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+            line-height: 1.8; padding-bottom: 60px;
+            /* 深色网格背景 */
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        /* ================= 导航栏 ================= */
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 5%; background-color: rgba(11, 19, 32, 0.85);
+            backdrop-filter: blur(10px); position: fixed; width: 100%; top: 0; left: 0;
+            z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .logo {
+            font-size: 20px; font-weight: bold; display: flex; align-items: center; gap: 10px;
+            color: #fff; text-decoration: none;
+        }
+        /* 这里使用了你要求的真实 logo.png */
+        .logo img {
+            width: 40px; height: 40px; object-fit: contain;
+        }
+        
+        .btn-back {
+            background: rgba(255, 255, 255, 0.05); color: #a0aec0;
+            padding: 8px 24px; border-radius: 20px; text-decoration: none; font-size: 14px;
+            border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s;
+        }
+        .btn-back:hover { background: rgba(0, 210, 255, 0.1); color: #00d2ff; }
+
+        /* ================= 页面头部 ================= */
+        .page-header { text-align: center; padding: 140px 5% 40px; position: relative; }
+        .page-header h1 { font-size: 3rem; font-weight: 800; color: #ffffff; margin-bottom: 15px; letter-spacing: 2px; }
+        .page-header p { color: #a0aec0; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+        
+        .glow-bg {
+            position: absolute; top: 50px; left: 50%; transform: translateX(-50%);
+            width: 400px; height: 200px; background: #00d2ff;
+            filter: blur(120px); opacity: 0.15; border-radius: 50%; z-index: -1;
+        }
+
+        /* ================= 联系卡片容器 ================= */
+        .contact-container {
+            max-width: 800px; margin: 40px auto 0; padding: 0 20px;
+        }
+
+        /* 主联系卡片 */
+        .contact-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 60px 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-card:hover {
+            border-color: rgba(0, 210, 255, 0.3);
+            box-shadow: 0 15px 40px rgba(0, 210, 255, 0.05);
+        }
+
+        /* 顶部装饰线 */
+        .contact-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, #00d2ff, #00ffaa);
+        }
+
+        /* 中间大图标 */
+        .mail-icon-wrapper {
+            width: 80px; height: 80px; margin: 0 auto 30px;
+            background: rgba(0, 210, 255, 0.1);
+            border: 1px solid rgba(0, 210, 255, 0.2);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: #00d2ff; font-size: 36px;
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.1);
+        }
+
+        .contact-card h2 {
+            color: #ffffff; font-size: 1.8rem; margin-bottom: 15px; font-weight: bold;
+        }
+
+        .contact-card p {
+            color: #a0aec0; font-size: 15px; margin-bottom: 40px; max-width: 500px; margin-left: auto; margin-right: auto;
+        }
+
+        /* 邮箱高亮显示区 */
+        .email-display {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px 30px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.1);
+            font-size: 1.2rem;
+            color: #00ffaa;
+            font-family: monospace; /* 邮箱用等宽字体更好看 */
+            margin-bottom: 30px;
+            transition: all 0.3s;
+        }
+
+        .email-display:hover {
+            background: rgba(0, 255, 170, 0.05);
+            border-color: rgba(0, 255, 170, 0.3);
+        }
+
+        /* 复制/发送按钮 */
+        .btn-mail {
+            display: inline-block;
+            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+            color: #fff;
+            padding: 12px 40px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-mail:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 210, 255, 0.3);
+        }
+
+        /* 底部说明 */
+        .footer-note {
+            text-align: center; margin-top: 40px; color: #718096; font-size: 13px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 600px) {
+            .page-header h1 { font-size: 2.2rem; }
+            .contact-card { padding: 40px 20px; }
+            .email-display { font-size: 1rem; padding: 12px 20px; flex-direction: column; gap: 10px; border-radius: 12px;}
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 导航栏 -->
+    <header>
+        <a href="index.html" class="logo">
+            <!-- 使用真实的 logo.png -->
+            <img src="images/logo.png" alt="Logo">
+            电气创新协会
+        </a>
+        <a href="index.html" class="btn-back">返回首页</a>
+    </header>
+
+    <!-- 页头 -->
+    <section class="page-header">
+        <div class="glow-bg"></div>
+        <h1>联系我们</h1>
+        <p>无论你是想加入我们、寻求技术合作，还是对协会的建设有宝贵建议，欢迎随时通过邮件与我们取得联系。</p>
+    </section>
+
+    <!-- 联系卡片主体 -->
+    <main class="contact-container">
+        <div class="contact-card">
+            <div class="mail-icon-wrapper">
+                <i class="fas fa-envelope-open-text"></i>
+            </div>
+            
+            <h2>发送邮件</h2>
+            <p>请点击下方按钮或直接复制邮箱地址。我们通常在 1-2 个工作日内回复。</p>
+            
+            <div class="email-display" id="emailText">
+                <i class="fas fa-at"></i>
+                xiangqiu.liang@outlook.com
+            </div>
+            
+            <br>
+            
+            <!-- 点击直接唤起本地邮件客户端 -->
+            <a href="mailto:xiangqiu.liang@outlook.com" class="btn-mail">
+                <i class="fas fa-paper-plane" style="margin-right: 8px;"></i> 立即联系
+            </a>
+        </div>
+
+        <div class="footer-note">
+            也可以直接前往协会活动室嵩德楼B612或者协会实验室陶德楼101寻找协会成员
+        </div>
+    </main>
+
+    <!-- 简单的复制邮箱交互脚本 -->
+    <script>
+        document.getElementById('emailText').addEventListener('click', function() {
+            const email = 'xiangqiu.liang@outlook.com';
+            // 使用现代的 Clipboard API 复制
+            navigator.clipboard.writeText(email).then(() => {
+                const originalText = this.innerHTML;
+                // 复制成功后的视觉反馈
+                this.innerHTML = '<i class="fas fa-check-circle"></i> 已复制到剪贴板';
+                this.style.color = '#00d2ff';
+                this.style.borderColor = 'rgba(0, 210, 255, 0.5)';
+                
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.style.color = '#00ffaa';
+                    this.style.borderColor = 'rgba(255,255,255,0.1)';
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>
