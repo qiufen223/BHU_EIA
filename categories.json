@@ -9,7 +9,8 @@
   {
     "title": "节点连通",
     "desc": "查看本机节点与其他节点的连通情况，帮助排查网络问题。",
-    "icon": "fa-bullhorn",
+    "icon": "fa-network-wired",
+    "img": "images/favicon_multi.png",
     "link": "FenLei/speedtest.html",
     "color": "blue"
   }
